@@ -20,11 +20,9 @@ public class MainActivity extends Activity implements OnClickListener {
         setContentView(R.layout.activity_main);
         mConnexionButton = (Button) findViewById(R.id.activity_main_connexion_button);
         mAboutButton = (Button) findViewById(R.id.activity_main_about_button);
-
         mAboutButton.setOnClickListener(this);
 
     }
-
 
     @Override
     public void onClick(View v) {
