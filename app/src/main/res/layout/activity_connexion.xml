@@ -91,7 +91,7 @@
         android:id="@+id/activity_connexion_password_forgetit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="125dp"
+        android:layout_marginHorizontal="140dp"
         android:text="Mot de passe oublié"
         tools:ignore="HardcodedText,UnusedAttribute" />
 </LinearLayout>
