@@ -27,8 +27,8 @@ public class MainActivity extends Activity implements OnClickListener {
     @Override
     public void onClick(View v) {
 
-                Intent babout = new Intent(MainActivity.this, ConnexionActivity.class);
-                startActivity(babout);
+                Intent bconnexion = new Intent(MainActivity.this, ConnexionActivity.class);
+                startActivity(bconnexion);
 
     }
 }
