@@ -1,13 +1,15 @@
 package com.desbois.mathis.bizzbee;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class ConnexionActivity extends AppCompatActivity {
+public class ConnexionActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView mNameText;
     private TextView mPasswordText;
     private TextView mPasswordForgetIt;
@@ -26,6 +28,16 @@ public class ConnexionActivity extends AppCompatActivity {
         mNameValue = (EditText) findViewById(R.id.activity_connexion_password_value);
         mPasswordValue = (EditText) findViewById(R.id.activity_connexion_password_value);
         mConnexionButton = (Button) findViewById(R.id.activity_connexion_button_connexion);
+        mPasswordForgetIt.setOnClickListener(this);
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.activity_connexion_password_forgetit:
+                Intent bconnexion = new Intent(ConnexionActivity.this, PasswordActivity.class);
+                startActivity(bconnexion);
+                break;
+        }
     }
 }
