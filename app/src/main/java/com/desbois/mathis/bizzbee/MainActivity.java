@@ -21,14 +21,20 @@ public class MainActivity extends Activity implements OnClickListener {
         mConnexionButton = (Button) findViewById(R.id.activity_main_connexion_button);
         mAboutButton = (Button) findViewById(R.id.activity_main_about_button);
         mAboutButton.setOnClickListener(this);
-
+        mConnexionButton.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
 
+        switch (v.getId()) {
+            case R.id.activity_main_connexion_button:
                 Intent bconnexion = new Intent(MainActivity.this, ConnexionActivity.class);
                 startActivity(bconnexion);
-
+                break;
+            case R.id.activity_main_about_button:
+                Intent babout = new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(babout);
+        }
     }
 }
