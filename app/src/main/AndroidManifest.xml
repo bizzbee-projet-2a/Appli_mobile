@@ -18,6 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ConnexionActivity"/>
+        <activity android:name=".AboutActivity"/>
+        <activity android:name=".PasswordActivity"/>
     </application>
 
 </manifest>
