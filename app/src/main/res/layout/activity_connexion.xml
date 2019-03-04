@@ -42,7 +42,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        android:text="Votre Nom * :"
+        android:text="Votre Nom : *"
         tools:ignore="HardcodedText" />
 
     <EditText
@@ -63,7 +63,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        android:text="Votre mot de passe * :"
+        android:text="Votre mot de passe : *"
         tools:ignore="HardcodedText" />
 
     <EditText
