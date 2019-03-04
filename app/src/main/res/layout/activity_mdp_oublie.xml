@@ -10,7 +10,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="20dp"
-
         android:textSize="20dp"
         android:text="Entrez votre adresse-mail, un lien vous sera envoyez afin de réinitialiser le mot de passe :"/>
 
@@ -23,7 +22,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="150dp"
         android:layout_marginTop="15dp"
-        android:layout_marginHorizontal="140dp"
-        android:text="Valider"/>
+        android:text="Valider" />
 </LinearLayout>

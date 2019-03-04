@@ -25,7 +25,7 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
         mNameText = (TextView) findViewById(R.id.activity_connexion_name_text);
         mPasswordText = (TextView) findViewById(R.id.activity_connexion_password_text);
         mPasswordForgetIt = (TextView) findViewById(R.id.activity_connexion_password_forgetit);
-        mNameValue = (EditText) findViewById(R.id.activity_connexion_password_value);
+        mNameValue = (EditText) findViewById(R.id.activity_connexion_name_value);
         mPasswordValue = (EditText) findViewById(R.id.activity_connexion_password_value);
         mConnexionButton = (Button) findViewById(R.id.activity_connexion_button_connexion);
         mPasswordForgetIt.setOnClickListener(this);
@@ -35,8 +35,8 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_connexion_password_forgetit:
-                Intent bconnexion = new Intent(ConnexionActivity.this, PasswordActivity.class);
-                startActivity(bconnexion);
+                Intent password = new Intent(ConnexionActivity.this, PasswordActivity.class);
+                startActivity(password);
                 break;
         }
     }
