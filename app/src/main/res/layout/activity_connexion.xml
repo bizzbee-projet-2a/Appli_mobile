@@ -1,87 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:orientation="vertical"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".ConnexionActivity">
-
-<!-- Header aligned to top -->
-
-
-<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_weight="1">
+    android:layout_height="match_parent"
+    tools:context=".ConnexionActivity">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <!-- Header aligned to top -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".ConnexionActivity">
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-        <TextView
-            android:id="@+id/activity_connexion_name_text"
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:text="Votre Nom : *"
-            tools:ignore="HardcodedText" />
+            android:orientation="vertical"
+            tools:context=".ConnexionActivity">
 
-        <EditText
-            android:id="@+id/activity_connexion_name_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginStart="30dp"
-            android:hint="Nom"
-            android:inputType="text"
-            tools:ignore="Autofill,HardcodedText,LabelFor" />
+            <TextView
+                android:id="@+id/activity_connexion_name_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:text="@string/votre_nom" />
 
-        <TextView
-            android:id="@+id/activity_connexion_password_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:text="Votre mot de passe : *"
-            tools:ignore="HardcodedText" />
+            <EditText
+                android:id="@+id/activity_connexion_name_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:hint="@string/nom"
+                android:inputType="text"
+                tools:ignore="Autofill" />
 
-        <EditText
-            android:id="@+id/activity_connexion_password_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginStart="30dp"
-            android:hint="Mot de passe"
-            android:inputType="textPassword"
-            tools:ignore="Autofill,HardcodedText,TextFields" />
+            <TextView
+                android:id="@+id/activity_connexion_password_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:text="@string/votre_mot_de_passe" />
 
-        <Button
-            android:id="@+id/activity_connexion_button_connexion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginStart="30dp"
-            android:text="Se Connecter"
-            tools:ignore="HardcodedText" />
+            <EditText
+                android:id="@+id/activity_connexion_password_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:hint="@string/mot_de_passe"
+                android:inputType="textPassword"
+                tools:ignore="Autofill" />
 
-        <TextView
-            android:id="@+id/activity_connexion_password_forgetit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="140dp"
-            android:text="Mot de passe oublié"
-            tools:ignore="HardcodedText,UnusedAttribute" />
-    </LinearLayout>
-</ScrollView>
+            <Button
+                android:id="@+id/activity_connexion_button_connexion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:text="@string/se_connecter" />
+
+            <TextView
+                android:id="@+id/activity_connexion_password_forgetit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/mot_de_passe_oubli"
+                tools:ignore="UnusedAttribute" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

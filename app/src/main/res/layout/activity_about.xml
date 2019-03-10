@@ -8,11 +8,16 @@
     tools:context=".AboutActivity">
 
     <!-- Header aligned to top -->
-
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1">
 
         <LinearLayout
@@ -24,16 +29,9 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="About"
-                android:textSize="10pt" />
-
-            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10pt"
-                android:text="Qui sommes nous ?"
+                android:text="@string/qui_sommes_nous"
                 android:textAllCaps="false"
                 android:textSize="8pt" />
 
@@ -41,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10pt"
-                android:text="Nous sommes une équipe de développeurs constituée de 4 membres ..."
+                android:text="@string/a_propos_text"
                 android:textAllCaps="false"
                 android:textSize="7pt" />
 
@@ -50,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10pt"
-                android:text="Nous contacter !"
+                android:text="@string/nous_contacter"
                 android:textSize="8pt" />
 
             <EditText
@@ -58,19 +56,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10pt"
-                android:hint="Subject" />
+                android:hint="@string/subject" />
 
             <EditText
                 android:id="@+id/txtMessage"
                 android:layout_width="match_parent"
                 android:layout_height="100pt"
-                android:hint="Message" />
+                android:hint="@string/message" />
 
             <Button
                 android:id="@+id/btnOK"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Envoyer" />
+                android:text="@string/envoyer" />
 
 
         </LinearLayout>

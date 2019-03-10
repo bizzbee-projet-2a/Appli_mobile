@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">BizzBee</string>
+    <string name="mot_de_passe_oubli">Mot de passe oublié</string>
+    <string name="se_connecter">Se Connecter</string>
+    <string name="mot_de_passe">Mot de passe</string>
+    <string name="votre_mot_de_passe">Votre mot de passe : *</string>
+    <string name="votre_nom">Nom : *</string>
+    <string name="nom">Nom</string>
+    <string name="accueil">Accueil</string>
+    <string name="connexion">Connexion</string>
+    <string name="about">A propos</string>
+    <string name="qui_sommes_nous">Qui sommes nous ?</string>
+    <string name="a_propos_text">Nous sommes une équipe de développeurs constituée de 4 membres …</string>
+    <string name="nous_contacter">Nous contacter !</string>
+    <string name="subject">Subject</string>
+    <string name="message">Message</string>
+    <string name="envoyer">Envoyer</string>
+    <string name="bizzbee_logo">Bizzbee logo</string>
 </resources>

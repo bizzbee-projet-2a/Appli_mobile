@@ -1,10 +1,13 @@
 package com.desbois.mathis.bizzbee;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,15 +27,12 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class ConnexionActivity extends Activity implements View.OnClickListener {
+public class ConnexionActivity extends AppCompatActivity implements View.OnClickListener {
     private static String connectionUrl = "https://bizzbee.maximegautier.fr/login";
 
     private static final String TAG = "ConnexionActivity";
     private static final int REQUEST_SIGNUP = 0;
 
-    private TextView mNameText;
-    private TextView mPasswordText;
-    private TextView mPasswordForgetIt;
     private EditText mNameValue;
     private EditText mPasswordValue;
     private Button mConnexionButton;
@@ -43,10 +43,13 @@ public class ConnexionActivity extends Activity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connexion);
 
-        mNameText = findViewById(R.id.activity_connexion_name_text);
-        mPasswordText = findViewById(R.id.activity_connexion_password_text);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        mPasswordForgetIt = findViewById(R.id.activity_connexion_password_forgetit);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+
+        actionbar.setTitle(R.string.connexion);
 
         mNameValue = findViewById(R.id.activity_connexion_name_value);
         mPasswordValue = findViewById(R.id.activity_connexion_password_value);
@@ -74,7 +77,7 @@ public class ConnexionActivity extends Activity implements View.OnClickListener 
 
     public void login() {
         if (!validate()) {
-            onLoginFailed();
+            onLoginFailed("Login failed");
             return;
         }
 
@@ -84,6 +87,10 @@ public class ConnexionActivity extends Activity implements View.OnClickListener 
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+
+        new Handler().postDelayed(() -> onLoginFailed("Timeout error..."), 10000);
 
         OkHttpClient okHttpClient = new OkHttpClient();
 
@@ -124,7 +131,7 @@ public class ConnexionActivity extends Activity implements View.OnClickListener 
                     if(text.equals("OK")) {
                         onLoginSuccess();
                     } else {
-                        onLoginFailed();
+                        onLoginFailed("Login failed");
                     }
                 });
 
@@ -135,13 +142,6 @@ public class ConnexionActivity extends Activity implements View.OnClickListener 
         Call response = okHttpClient.newCall(request);
         response.enqueue(callback);
         Log.i(TAG, response.request().toString());
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        // disable going back to the MainActivity
-        //moveTaskToBack(true);
     }
 
     @Override
@@ -163,9 +163,9 @@ public class ConnexionActivity extends Activity implements View.OnClickListener 
         this.finish();
     }
 
-    public void onLoginFailed() {
+    public void onLoginFailed(String text) {
         mConnexionButton.setEnabled(true);
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), text, Toast.LENGTH_LONG).show();
         Log.i(TAG, "Not connected");
     }
 
