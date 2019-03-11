@@ -71,6 +71,7 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View view) {
+        Log.i("TEST", view.getId() + " " + R.id.activity_connexion_password_forgetit);
         switch (view.getId()) {
             case R.id.activity_connexion_button_connexion:
                 login();

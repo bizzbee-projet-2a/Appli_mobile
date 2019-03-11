@@ -19,4 +19,5 @@ public class PasswordActivity extends Activity {
         mPassword_mail = findViewById(R.id.mdp_oublie_mail);
         mPassword_button = findViewById(R.id.mdp_oublie_button);
     }
+    //http://www.ssaurel.com/blog/how-to-send-an-email-with-javamail-api-in-android/
 }
