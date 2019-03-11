@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -38,6 +39,7 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
     private Button mConnexionButton;
     private TextView mPasswordForget;
 
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,7 +99,7 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
 
-        new Handler().postDelayed(() -> onLoginFailed("Timeout error..."), 10000);
+        handler.postDelayed(() -> onLoginFailed("Timeout error..."), 10000);
 
         OkHttpClient okHttpClient = new OkHttpClient();
 
@@ -168,12 +170,15 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
         Toast.makeText(getBaseContext(), "Login successful", Toast.LENGTH_LONG).show();
         Log.i(TAG, "Connected");
 
-        try {
-            MainActivity.connect(l, p);
-        } catch (CredentialsException e) {
-            Log.e("Bizzbee", e.getMessage());
-        }
+        ArrayList<String> credentials = new ArrayList<>();
+        credentials.add(l);
+        credentials.add(p);
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("credentials", credentials);
 
+        setResult(MainActivity.CONNECTION_OK, returnIntent);
+
+        handler.removeCallbacksAndMessages(null);
         this.finish();
     }
 
