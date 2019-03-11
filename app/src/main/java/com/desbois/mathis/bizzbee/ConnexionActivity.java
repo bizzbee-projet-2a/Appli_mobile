@@ -36,6 +36,7 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
     private EditText mNameValue;
     private EditText mPasswordValue;
     private Button mConnexionButton;
+    private TextView mPasswordForget;
 
 
     @Override
@@ -55,6 +56,7 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
         mPasswordValue = findViewById(R.id.activity_connexion_password_value);
 
         mConnexionButton = findViewById(R.id.activity_connexion_button_connexion);
+        mPasswordForget = findViewById(R.id.activity_connexion_password_forgetit);
 
         mConnexionButton.setOnClickListener(this);
 
@@ -72,6 +74,10 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
         switch (view.getId()) {
             case R.id.activity_connexion_button_connexion:
                 login();
+                break;
+            case R.id.activity_connexion_password_forgetit:
+                Intent intent = new Intent(this, PasswordActivity.class);
+                startActivity(intent);
         }
     }
 
