@@ -8,6 +8,7 @@
     <string name="nom">Nom</string>
     <string name="accueil">Accueil</string>
     <string name="connexion">Connexion</string>
+    <string name="deconnexion">Déconnexion</string>
     <string name="about">A propos</string>
     <string name="qui_sommes_nous">Qui sommes nous ?</string>
     <string name="a_propos_text">Nous sommes une équipe de développeurs constituée de 4 membres …</string>

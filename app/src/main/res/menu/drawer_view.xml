@@ -5,10 +5,18 @@
             android:id="@+id/nav_accueil"
             android:icon="@drawable/ic_home"
             android:title="@string/accueil" />
+
         <item
             android:id="@+id/nav_connect"
             android:icon="@drawable/ic_account"
             android:title="@string/connexion" />
+
+        <item
+            android:id="@+id/nav_deconnect"
+            android:icon="@drawable/ic_power"
+            android:title="@string/deconnexion"
+            android:visible="false" />
+
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_info"

@@ -129,7 +129,7 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
 
                 runOnUiThread(() -> {
                     if(text.equals("OK")) {
-                        onLoginSuccess();
+                        onLoginSuccess(login, password);
                     } else {
                         onLoginFailed("Login failed");
                     }
@@ -156,10 +156,17 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    public void onLoginSuccess() {
+    public void onLoginSuccess(String l, String p) {
         mConnexionButton.setEnabled(true);
         Toast.makeText(getBaseContext(), "Login successful", Toast.LENGTH_LONG).show();
         Log.i(TAG, "Connected");
+
+        try {
+            MainActivity.connect(l, p);
+        } catch (CredentialsException e) {
+            Log.e("Bizzbee", e.getMessage());
+        }
+
         this.finish();
     }
 

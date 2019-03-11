@@ -61,10 +61,12 @@
                                   </option>
                                   <option name="values">
                                     <map>
+                                      <entry key="backgroundAssetType" value="COLOR" />
+                                      <entry key="backgroundColor" value="00574b" />
                                       <entry key="backgroundLayerName" value="ic_launcher_background" />
                                       <entry key="foregroundImage" value="$PROJECT_DIR$/app/src/main/res/drawable/ic_buzzbee.xml" />
                                       <entry key="foregroundLayerName" value="ic_launcher_foreground" />
-                                      <entry key="outputName" value="ic_bizzbee" />
+                                      <entry key="outputName" value="ic_bizzbee_no_background" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -130,10 +132,24 @@
                   <entry key="vectorAssetStep">
                     <value>
                       <PersistentState>
+                        <option name="children">
+                          <map>
+                            <entry key="clipartAsset">
+                              <value>
+                                <PersistentState>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="url" value="jar:file:/snap/android-studio/71/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_power_settings_new_black_24dp.xml" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                         <option name="values">
                           <map>
-                            <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_buzzbee" />
+                            <entry key="outputName" value="ic_power" />
                             <entry key="sourceFile" value="$PROJECT_DIR$/../../S4/CE/Com/buzzbee.svg" />
                           </map>
                         </option>
