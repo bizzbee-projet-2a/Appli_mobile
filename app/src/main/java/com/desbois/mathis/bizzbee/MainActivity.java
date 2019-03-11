@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,15 +23,20 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements WelcomeFragment.WelcomeListener {
 
+    public static final int CONNECTION = 0;
+    public static final int CONNECTION_OK = 1;
+
+    private static final String TAG = "MainActivity";
+
     private static DrawerLayout drawerLayout;
-    private static final List<MenuItem> items = new ArrayList<>();
-    private static int position = 0;
+    private final List<MenuItem> items = new ArrayList<>();
+    private int position = 0;
 
-    private static Menu menu;
+    private Menu menu;
 
-    private static boolean connected = false;
-    private static String login = "";
-    private static String pass = "";
+    private boolean connected = false;
+    private String login = "";
+    private String pass = "";
 
 
     @Override
@@ -62,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
                 .commit();
 
         navigationView.setNavigationItemSelectedListener(menuItem -> {
-            // close drawer when item is tapped
             drawerLayout.closeDrawers();
 
             // Add code here to update the UI based on the item selected
@@ -72,23 +77,23 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
 
             Fragment fragment = null;
             FragmentManager fragmentManager = getSupportFragmentManager();
-            Intent intent = null;
 
             switch(menuItem.getItemId()) {
                 case R.id.nav_accueil:
                     fragment = new WelcomeFragment();
                     break;
                 case R.id.nav_connect:
-                    intent = new Intent(MainActivity.this, ConnexionActivity.class);
+                    startConnectionActivity();
                     break;
                 case R.id.nav_about:
-                    intent = new Intent(MainActivity.this, AboutActivity.class);
+                    Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+                    startActivity(intent);
                     break;
                 case R.id.nav_deconnect:
                     try {
                         deconnect(this);
                     } catch (CredentialsException e) {
-                        Toast.makeText(this, "Oops... Can't deconnect", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Oops... Can't disconnect", Toast.LENGTH_LONG).show();
                     }
 
                     break;
@@ -103,8 +108,6 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
                 fragmentManager.beginTransaction()
                     .replace(R.id.flContent, fragment)
                     .commit();
-            } else if(intent != null) {
-                startActivity(intent);
             }
 
             return true;
@@ -112,7 +115,23 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
 
     }
 
-    public static void connect(String l, String p) throws CredentialsException {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CONNECTION) {
+            if(resultCode == MainActivity.CONNECTION_OK) {
+                //result[0] = login : result[1] = pass
+                ArrayList<String> result = data.getStringArrayListExtra("credentials");
+
+                try {
+                    connect(result.get(0), result.get(1));
+                } catch (CredentialsException e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        }
+    }
+
+    public void connect(String l, String p) throws CredentialsException {
         setCredentials(l, p);
         connected = true;
 
@@ -120,16 +139,16 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
         getMenuItem(R.id.nav_deconnect).setVisible(true);
     }
 
-    public static void deconnect(Context c) throws CredentialsException {
+    public void deconnect(Context c) throws CredentialsException {
         setCredentials("","");
         connected = false;
-        Toast.makeText(c, "You have been deconnected !", Toast.LENGTH_LONG).show();
+        Toast.makeText(c, "You have been disconnected !", Toast.LENGTH_LONG).show();
 
         getMenuItem(R.id.nav_connect).setVisible(true);
         getMenuItem(R.id.nav_deconnect).setVisible(false);
     }
 
-    private static void setCredentials(String l, String p) throws CredentialsException {
+    private void setCredentials(String l, String p) throws CredentialsException {
         if(!connected) {
             if(login.equals("")) {
                 login = l;
@@ -158,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
 
     }
 
-    public static MenuItem getMenuItem(int id) {
+    public MenuItem getMenuItem(int id) {
         boolean trouve = false;
         int i = 0;
         MenuItem res = null;
@@ -175,24 +194,28 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
         return res;
     }
 
-    public static boolean isConnected() {
+    public boolean isConnected() {
         return connected;
     }
 
-    public static String getLogin() {
+    public String getLogin() {
         return login;
     }
 
-    public static String getPass() {
+    public String getPass() {
         return pass;
     }
 
-    public static String getAuthorization() throws CredentialsException {
+    public String getAuthorization() throws CredentialsException {
         if(connected) {
             return Base64.encodeToString((login + ":" + pass).getBytes(), Base64.DEFAULT);
         } else {
             throw new CredentialsException();
         }
+    }
+
+    public void startConnectionActivity() {
+        startActivityForResult(new Intent(MainActivity.this, ConnexionActivity.class), CONNECTION);
     }
 
     @Override
@@ -209,8 +232,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
     public void onButtonClick(View v) {
         switch (v.getId()) {
             case R.id.activity_main_connexion_button:
-                Intent bconnexion = new Intent(MainActivity.this, ConnexionActivity.class);
-                startActivity(bconnexion);
+                startConnectionActivity();
                 break;
             case R.id.activity_main_about_button:
                 Intent babout = new Intent(MainActivity.this, AboutActivity.class);
