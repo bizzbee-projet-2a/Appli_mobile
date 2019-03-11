@@ -32,7 +32,6 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
     private static String connectionUrl = "https://bizzbee.maximegautier.fr/login";
 
     private static final String TAG = "ConnexionActivity";
-    private static final int REQUEST_SIGNUP = 0;
 
     private EditText mNameValue;
     private EditText mPasswordValue;
@@ -73,7 +72,7 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View view) {
-        Log.i("TEST", view.getId() + " " + R.id.activity_connexion_password_forgetit);
+        Log.i(TAG, view.getId() + " " + R.id.activity_connexion_password_forgetit);
         switch (view.getId()) {
             case R.id.activity_connexion_button_connexion:
                 login();
@@ -151,18 +150,6 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
         Call response = okHttpClient.newCall(request);
         response.enqueue(callback);
         Log.i(TAG, response.request().toString());
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                this.finish();
-            }
-        }
     }
 
     public void onLoginSuccess(String l, String p) {

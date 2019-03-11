@@ -17,4 +17,6 @@
     <string name="message">Message</string>
     <string name="envoyer">Envoyer</string>
     <string name="bizzbee_logo">Bizzbee logo</string>
+    <string name="ruchers_ruches">Ruchers / Ruches</string>
+    <string name="tableau_de_bord">Tableau de bord</string>
 </resources>
