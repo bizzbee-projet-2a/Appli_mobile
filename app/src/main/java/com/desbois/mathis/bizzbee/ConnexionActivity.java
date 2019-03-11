@@ -76,7 +76,7 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
                 login();
                 break;
             case R.id.activity_connexion_password_forgetit:
-                Intent intent = new Intent(ConnexionActivity.this, PasswordActivity.class);
+                Intent intent = new Intent(this, PasswordActivity.class);
                 startActivity(intent);
         }
     }
