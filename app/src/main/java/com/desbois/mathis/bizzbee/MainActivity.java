@@ -1,6 +1,7 @@
 package com.desbois.mathis.bizzbee;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
@@ -67,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
                 .replace(R.id.flContent, frag)
                 .commit();
 
+        setMenu(connected);
+
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             drawerLayout.closeDrawers();
 
@@ -82,6 +86,12 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
                 case R.id.nav_accueil:
                     fragment = new WelcomeFragment();
                     break;
+                case R.id.nav_dashboard:
+                    fragment = new WelcomeFragment();
+                    break;
+                case R.id.nav_rucher:
+                    fragment = new ListRucherFragment();
+                    break;
                 case R.id.nav_connect:
                     startConnectionActivity();
                     break;
@@ -90,11 +100,21 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
                     startActivity(intent);
                     break;
                 case R.id.nav_deconnect:
-                    try {
-                        deconnect(this);
-                    } catch (CredentialsException e) {
-                        Toast.makeText(this, "Oops... Can't disconnect", Toast.LENGTH_LONG).show();
-                    }
+                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                    alert.setTitle("Do you want to logout ?");
+                    // alert.setMessage("Message");
+
+                    alert.setPositiveButton("Ok", (dialog, whichButton) -> {
+                        try {
+                            deconnect(this);
+                        } catch (CredentialsException e) {
+                            Toast.makeText(this, "Oops... Can't disconnect", Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                    alert.setNegativeButton("Cancel", (dialog, whichButton) -> {});
+
+                    alert.show();
 
                     break;
                 default :
@@ -135,8 +155,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
         setCredentials(l, p);
         connected = true;
 
-        getMenuItem(R.id.nav_connect).setVisible(false);
-        getMenuItem(R.id.nav_deconnect).setVisible(true);
+        setMenu(connected);
     }
 
     public void deconnect(Context c) throws CredentialsException {
@@ -144,8 +163,15 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
         connected = false;
         Toast.makeText(c, "You have been disconnected !", Toast.LENGTH_LONG).show();
 
-        getMenuItem(R.id.nav_connect).setVisible(true);
-        getMenuItem(R.id.nav_deconnect).setVisible(false);
+        setMenu(connected);
+    }
+
+    private void setMenu(boolean connected) {
+        getMenuItem(R.id.nav_connect).setVisible(!connected);
+        getMenuItem(R.id.nav_accueil).setVisible(!connected);
+        getMenuItem(R.id.nav_deconnect).setVisible(connected);
+        getMenuItem(R.id.nav_dashboard).setVisible(connected);
+        getMenuItem(R.id.nav_rucher).setVisible(connected);
     }
 
     private void setCredentials(String l, String p) throws CredentialsException {

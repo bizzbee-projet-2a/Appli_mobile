@@ -19,4 +19,16 @@
     <string name="bizzbee_logo">Bizzbee logo</string>
     <string name="ruchers_ruches">Ruchers / Ruches</string>
     <string name="tableau_de_bord">Tableau de bord</string>
+
+    <string-array name="Planets">
+        <item>Sun</item>
+        <item>Mercury</item>
+        <item>Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item>
+    </string-array>
 </resources>
