@@ -1,6 +1,7 @@
 package com.desbois.mathis.bizzbee;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -92,13 +93,10 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
         mConnexionButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(ConnexionActivity.this);
+
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-
-        handler.postDelayed(() -> onLoginFailed("Timeout error..."), 10000);
 
         OkHttpClient okHttpClient = new OkHttpClient();
 
@@ -115,6 +113,7 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
 
         Request request = new Request.Builder()
                 .url(connectionUrl)
+                .tag("connection")
                 .post(requestBody)
                 .build();
 
@@ -150,6 +149,33 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
         Call response = okHttpClient.newCall(request);
         response.enqueue(callback);
         Log.i(TAG, response.request().toString());
+
+        progressDialog.setOnCancelListener((DialogInterface dialog) -> {
+            cancelRequest(okHttpClient);
+            onLoginFailed("Attempt canceled...");
+            handler.removeCallbacksAndMessages(null);
+        });
+
+        handler.postDelayed(() -> {
+            cancelRequest(okHttpClient);
+            onLoginFailed("Timeout error...");
+            progressDialog.dismiss();
+        }, 10000);
+    }
+
+    public void cancelRequest(OkHttpClient okHttpClient) {
+        //When you want to cancel:
+        //A) go through the queued calls and cancel if the tag matches:
+        for (Call call : okHttpClient.dispatcher().queuedCalls()) {
+            if (call.request().tag().equals("connection"))
+                call.cancel();
+        }
+
+        //B) go through the running calls and cancel if the tag matches:
+        for (Call call : okHttpClient.dispatcher().runningCalls()) {
+            if (call.request().tag().equals("connection"))
+                call.cancel();
+        }
     }
 
     public void onLoginSuccess(String l, String p) {

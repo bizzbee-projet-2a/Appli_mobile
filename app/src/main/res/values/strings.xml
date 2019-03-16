@@ -19,6 +19,9 @@
     <string name="bizzbee_logo">Bizzbee logo</string>
     <string name="ruchers_ruches">Ruchers / Ruches</string>
     <string name="tableau_de_bord">Tableau de bord</string>
+    <string name="rucher">Rucher</string>
+    <string name="ruches">Ruches</string>
+    <string name="graphes">Graphes</string>
 
     <string-array name="Planets">
         <item>Sun</item>

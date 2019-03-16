@@ -18,6 +18,8 @@ public class WelcomeFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        ((MainActivity) getActivity()).setActionBarTitle("Accueil");
+
         View root = inflater.inflate(R.layout.fragment_welcome, container, false);
 
         mConnexionButton = root.findViewById(R.id.activity_main_connexion_button);

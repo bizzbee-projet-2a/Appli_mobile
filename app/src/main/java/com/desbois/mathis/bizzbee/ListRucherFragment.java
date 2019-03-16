@@ -1,5 +1,6 @@
 package com.desbois.mathis.bizzbee;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,10 +18,13 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class ListRucherFragment extends ListFragment implements AdapterView.OnItemClickListener {
+    private static String listRucherUrl = "https://bizzbee.maximegautier.fr/apiculteurInfos";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ((MainActivity) getActivity()).setActionBarTitle("Ruchers");
+
         return inflater.inflate(R.layout.fragment_list_rucher, container, false);
     }
 
@@ -42,5 +46,8 @@ public class ListRucherFragment extends ListFragment implements AdapterView.OnIt
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Toast.makeText(getActivity(), "Item: " + position, Toast.LENGTH_SHORT).show();
+
+        Intent babout = new Intent(getContext(), RucherActivity.class);
+        startActivity(babout);
     }
 }

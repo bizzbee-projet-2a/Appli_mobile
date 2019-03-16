@@ -1,7 +1,6 @@
 package com.desbois.mathis.bizzbee;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -13,7 +12,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,11 +33,6 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
     private int position = 0;
 
     private Menu menu;
-
-    private boolean connected = false;
-    private String login = "";
-    private String pass = "";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +62,13 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
                 .replace(R.id.flContent, frag)
                 .commit();
 
-        setMenu(connected);
+        try {
+            connect("toto", "toto");
+        } catch (CredentialsException e) {
+            Log.e(TAG, e.getMessage());
+        }
+
+        setMenu(((BizzbeeApp)getApplicationContext()).isConnected());
 
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             drawerLayout.closeDrawers();
@@ -144,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
 
                 try {
                     connect(result.get(0), result.get(1));
-                } catch (CredentialsException e) {
+                } catch (Exception e) {
                     Log.e(TAG, e.getMessage());
                 }
             }
@@ -152,18 +151,23 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
     }
 
     public void connect(String l, String p) throws CredentialsException {
-        setCredentials(l, p);
-        connected = true;
+        BizzbeeApp app = ((BizzbeeApp) getApplicationContext());
+        app.setCredentials(l, p);
 
-        setMenu(connected);
+        setMenu(app.isConnected());
     }
 
     public void deconnect(Context c) throws CredentialsException {
-        setCredentials("","");
-        connected = false;
+        BizzbeeApp app = ((BizzbeeApp) getApplicationContext());
+        app.setCredentials();
+
         Toast.makeText(c, "You have been disconnected !", Toast.LENGTH_LONG).show();
 
-        setMenu(connected);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.flContent, new WelcomeFragment())
+                .commit();
+
+        setMenu(app.isConnected());
     }
 
     private void setMenu(boolean connected) {
@@ -172,35 +176,6 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
         getMenuItem(R.id.nav_deconnect).setVisible(connected);
         getMenuItem(R.id.nav_dashboard).setVisible(connected);
         getMenuItem(R.id.nav_rucher).setVisible(connected);
-    }
-
-    private void setCredentials(String l, String p) throws CredentialsException {
-        if(!connected) {
-            if(login.equals("")) {
-                login = l;
-            } else {
-                throw new CredentialsException();
-            }
-
-            if(pass.equals("")) {
-                pass = p;
-            } else {
-                throw new CredentialsException();
-            }
-        } else {
-            if(!login.equals("")) {
-                login = l;
-            } else {
-                throw new CredentialsException();
-            }
-
-            if(!pass.equals("")) {
-                pass = p;
-            } else {
-                throw new CredentialsException();
-            }
-        }
-
     }
 
     public MenuItem getMenuItem(int id) {
@@ -220,24 +195,8 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
         return res;
     }
 
-    public boolean isConnected() {
-        return connected;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public String getPass() {
-        return pass;
-    }
-
-    public String getAuthorization() throws CredentialsException {
-        if(connected) {
-            return Base64.encodeToString((login + ":" + pass).getBytes(), Base64.DEFAULT);
-        } else {
-            throw new CredentialsException();
-        }
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
 
     public void startConnectionActivity() {
