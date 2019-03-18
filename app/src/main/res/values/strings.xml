@@ -21,6 +21,7 @@
     <string name="tableau_de_bord">Tableau de bord</string>
     <string name="rucher">Rucher</string>
     <string name="ruches">Ruches</string>
+    <string name="ruche">Ruche</string>
     <string name="graphes">Graphes</string>
 
     <string-array name="Planets">

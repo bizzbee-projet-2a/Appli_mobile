@@ -17,6 +17,6 @@ public class RucherGraphesFragment extends Fragment {
         // properly.
 
         return inflater.inflate(
-                R.layout.fragment_tab_rucher, container, false);
+                R.layout.fragment_tab_graphes, container, false);
     }
 }

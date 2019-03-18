@@ -44,6 +44,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
         </activity>
+        <activity android:name=".RucheActivity" android:parentActivityName=".RucherActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".RucherActivity"/>
+        </activity>
     </application>
 
 </manifest>
