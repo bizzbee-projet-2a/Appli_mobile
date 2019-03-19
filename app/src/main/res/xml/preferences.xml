@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:defaultValue="popular"
+        android:entries="@array/categories"
+        android:entryValues="@array/categories_value"
+        android:summary="Select categories of movies"
+        android:title="Categories"
+        android:key="@string/movies_categories_key" />
+
+    <android.support.v7.preference.PreferenceCategory
+        android:title="Connexion">
+
+        <EditTextPreference
+            android:title="URL du serveur"
+            android:key="serv_url"
+            android:summary="Please provide the server's url"
+            android:singleLine="true" />
+
+        <SwitchPreference
+            android:key="notif"
+            android:title="Notifications"
+            android:defaultValue="false"
+            android:summary="Disabled" />
+
+    </android.support.v7.preference.PreferenceCategory>
+
+</android.support.v7.preference.PreferenceScreen>

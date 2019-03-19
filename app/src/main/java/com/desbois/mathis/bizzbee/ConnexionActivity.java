@@ -3,17 +3,23 @@ package com.desbois.mathis.bizzbee;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +36,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ConnexionActivity extends AppCompatActivity implements View.OnClickListener {
-    private static String connectionUrl = "https://bizzbee.maximegautier.fr/login";
+    private static String connectionUrl = "/login";
 
     private static final String TAG = "ConnexionActivity";
 
@@ -38,6 +44,9 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
     private EditText mPasswordValue;
     private Button mConnexionButton;
     private TextView mPasswordForget;
+    private CheckBox mStayConnected;
+
+    private String url = "";
 
     private Handler handler = new Handler();
 
@@ -45,6 +54,51 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connexion);
+
+        if(((BizzbeeApp)getApplication()).isConnected()) {
+            this.finish();
+        }
+
+        if(!((BizzbeeApp)getApplication()).isBizzbeeUrl()) {
+            LayoutInflater layoutInflater = LayoutInflater.from(this);
+            View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setView(promptView);
+
+            final EditText editText = promptView.findViewById(R.id.edittext);
+            // setup a dialog window
+            alertDialogBuilder.setCancelable(false)
+                    .setPositiveButton("OK", (dialog, id) -> {
+                        url = editText.getText().toString();
+                        Log.i(TAG, url);
+
+                        dialog.dismiss();
+
+                        final ProgressDialog progressDialog = new ProgressDialog(ConnexionActivity.this);
+
+                        progressDialog.setIndeterminate(true);
+                        progressDialog.setMessage("Testing url...");
+                        progressDialog.show();
+
+                        if(!((BizzbeeApp) getApplication()).setServUrl(url)) {
+                            progressDialog.dismiss();
+                            setResult(MainActivity.CONNECTION_OK, new Intent());
+                            this.finish();
+                        } else {
+                            progressDialog.dismiss();
+                        }
+                    })
+                    .setNegativeButton("Annuler", (dialog, id) -> {
+                        dialog.cancel();
+
+                        setResult(MainActivity.CONNECTION_OK, new Intent());
+                        this.finish();
+                    });
+
+            // create an alert dialog
+            AlertDialog alert = alertDialogBuilder.create();
+            alert.show();
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,6 +113,8 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
 
         mConnexionButton = findViewById(R.id.activity_connexion_button_connexion);
         mPasswordForget = findViewById(R.id.activity_connexion_password_forgetit);
+
+        mStayConnected = findViewById(R.id.stay_connected);
 
         mConnexionButton.setOnClickListener(this);
 
@@ -102,6 +158,7 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
 
         String login = mNameValue.getText().toString();
         String password = mPasswordValue.getText().toString();
+        boolean stayConnected = mStayConnected.isChecked();
 
         RequestBody requestBody = new FormBody.Builder()
                 .add("login", login)
@@ -112,7 +169,7 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
         Log.i(TAG, "Password : " + password);
 
         Request request = new Request.Builder()
-                .url(connectionUrl)
+                .url("https://" + ((BizzbeeApp)getApplication()).getServUrl() + connectionUrl)
                 .tag("connection")
                 .post(requestBody)
                 .build();
@@ -136,7 +193,7 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
 
                 runOnUiThread(() -> {
                     if(text.equals("OK")) {
-                        onLoginSuccess(login, password);
+                        onLoginSuccess(login, password, stayConnected);
                     } else {
                         onLoginFailed("Login failed");
                     }
@@ -151,34 +208,19 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
         Log.i(TAG, response.request().toString());
 
         progressDialog.setOnCancelListener((DialogInterface dialog) -> {
-            cancelRequest(okHttpClient);
+            Utils.cancelRequest(okHttpClient);
             onLoginFailed("Attempt canceled...");
             handler.removeCallbacksAndMessages(null);
         });
 
         handler.postDelayed(() -> {
-            cancelRequest(okHttpClient);
+            Utils.cancelRequest(okHttpClient);
             onLoginFailed("Timeout error...");
             progressDialog.dismiss();
         }, 10000);
     }
 
-    public void cancelRequest(OkHttpClient okHttpClient) {
-        //When you want to cancel:
-        //A) go through the queued calls and cancel if the tag matches:
-        for (Call call : okHttpClient.dispatcher().queuedCalls()) {
-            if (call.request().tag().equals("connection"))
-                call.cancel();
-        }
-
-        //B) go through the running calls and cancel if the tag matches:
-        for (Call call : okHttpClient.dispatcher().runningCalls()) {
-            if (call.request().tag().equals("connection"))
-                call.cancel();
-        }
-    }
-
-    public void onLoginSuccess(String l, String p) {
+    public void onLoginSuccess(String l, String p, boolean s) {
         mConnexionButton.setEnabled(true);
         Toast.makeText(getBaseContext(), "Login successful", Toast.LENGTH_LONG).show();
         Log.i(TAG, "Connected");
@@ -188,6 +230,13 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
         credentials.add(p);
         Intent returnIntent = new Intent();
         returnIntent.putExtra("credentials", credentials);
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if(s) {
+            Utils.addSharedPreferences(sharedPref, "stay_connected", s);
+            Utils.addSharedPreferences(sharedPref, "login", l);
+            Utils.addSharedPreferences(sharedPref, "pass", p);
+        }
 
         setResult(MainActivity.CONNECTION_OK, returnIntent);
 

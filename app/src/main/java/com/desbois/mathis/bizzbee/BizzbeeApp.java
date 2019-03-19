@@ -1,22 +1,29 @@
 package com.desbois.mathis.bizzbee;
 
 import android.app.Application;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.util.Base64;
 
 public class BizzbeeApp extends Application {
-    private String login = "toto";
-    private String password = "toto";
+    private String servUrl;
+    private boolean isBizzbeeUrl;
 
-    private boolean connected = true;
+    private String login;
+    private String password;
+
+    private boolean connected;
 
     private static Resources resources;
+
+    private Intent intentService;
 
     public BizzbeeApp() {
         super.onCreate();
 
         login = "";
         password = "";
+        servUrl = "";
 
         connected = false;
     }
@@ -26,6 +33,24 @@ public class BizzbeeApp extends Application {
         super.onCreate();
 
         resources = getResources();
+
+        intentService = new Intent(this, BizzbeeService.class);
+    }
+
+    public void startBizzbeeService() {
+        startService(intentService);
+    }
+
+    public void stopBizzbeeService() {
+        stopService(intentService);
+    }
+
+    public boolean isBizzbeeUrl() {
+        return isBizzbeeUrl;
+    }
+
+    public String getServUrl() {
+        return servUrl;
     }
 
     public String getLogin() {
@@ -60,6 +85,17 @@ public class BizzbeeApp extends Application {
         } else {
             throw new CredentialsException();
         }
+    }
+
+    public boolean setServUrl(String s) {
+        String beautified = Utils.beautifyUrl(s);
+        isBizzbeeUrl = false;
+        if(Utils.isBizzbeeUrl(beautified)) {
+            servUrl = s;
+            isBizzbeeUrl = true;
+        }
+
+        return isBizzbeeUrl;
     }
 
     public String getAuthorization() throws CredentialsException {

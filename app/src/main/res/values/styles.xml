@@ -30,4 +30,14 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+
+    <!-- Style for a custom Preference Entry -->
+    <style name="AppPreference">
+    </style>
+
+    <!-- Style for a DialogPreference Entry -->
+    <style name="AppPreference.DialogPreference">
+        <item name="positiveButtonText">Ok</item>
+        <item name="negativeButtonText">Cancel</item>
+    </style>
 </resources>

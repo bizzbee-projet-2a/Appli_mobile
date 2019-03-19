@@ -23,6 +23,7 @@
     <string name="ruches">Ruches</string>
     <string name="ruche">Ruche</string>
     <string name="graphes">Graphes</string>
+    <string name="param_tres">Paramètres</string>
 
     <string-array name="Planets">
         <item>Sun</item>
@@ -35,4 +36,8 @@
         <item>Uranus</item>
         <item>Neptune</item>
     </string-array>
+
+    <string name="movies_categories_key">categoriesKey</string>
+    <string name="default_movies_categories">popular</string>
+    <string name="rester_connect">Rester connecté</string>
 </resources>
