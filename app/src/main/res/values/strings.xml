@@ -7,8 +7,8 @@
     <string name="votre_nom">Nom : *</string>
     <string name="nom">Nom</string>
     <string name="accueil">Accueil</string>
-    <string name="connexion">Connexion</string>
     <string name="deconnexion">Déconnexion</string>
+    <string name="connexion">Connexion</string>
     <string name="about">A propos</string>
     <string name="qui_sommes_nous">Qui sommes nous ?</string>
     <string name="a_propos_text">Nous sommes une équipe de développeurs constituée de 4 membres …</string>
@@ -40,4 +40,7 @@
     <string name="movies_categories_key">categoriesKey</string>
     <string name="default_movies_categories">popular</string>
     <string name="rester_connect">Rester connecté</string>
+    <string name="subtitle">ID : </string>
+    <string name="principal">Principal</string>
+    <string name="informations">Informations</string>
 </resources>

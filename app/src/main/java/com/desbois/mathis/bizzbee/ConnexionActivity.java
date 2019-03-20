@@ -82,7 +82,7 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
 
                         if(!((BizzbeeApp) getApplication()).setServUrl(url)) {
                             progressDialog.dismiss();
-                            setResult(MainActivity.CONNECTION_OK, new Intent());
+                            setResult(MainActivity.CONNECTION_BAD_URL, new Intent());
                             this.finish();
                         } else {
                             progressDialog.dismiss();
@@ -91,7 +91,7 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
                     .setNegativeButton("Annuler", (dialog, id) -> {
                         dialog.cancel();
 
-                        setResult(MainActivity.CONNECTION_OK, new Intent());
+                        setResult(MainActivity.CONNECTION_BAD_URL, new Intent());
                         this.finish();
                     });
 
@@ -180,7 +180,7 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onFailure(Call call, IOException e) {
                 runOnUiThread(() -> {
-                    Log.i("Connection", "Failed");
+                    Log.i(TAG, "Failed");
                     Toast.makeText(ConnexionActivity.this, "Failed",
                             Toast.LENGTH_LONG).show();
                 });
@@ -192,7 +192,7 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
                 final String text = response.body().string();
 
                 runOnUiThread(() -> {
-                    if(text.equals("OK")) {
+                    if(response.isSuccessful() && text.equals("OK")) {
                         onLoginSuccess(login, password, stayConnected);
                     } else {
                         onLoginFailed("Login failed");

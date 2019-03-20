@@ -1,20 +1,26 @@
 package com.desbois.mathis.bizzbee;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.widget.Toast;
 
 public class BizzbeeService extends Service {
     private static final String url = "";
 
     private static final int NOTIF_ID = 1;
+    private static final int NOTIF_ID_ALERT = 2;
     private static final String NOTIF_CHANNEL_ID = "Bizzbee_Id";
 
     private SharedPreferences sharedPref;
@@ -29,6 +35,7 @@ public class BizzbeeService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId){
 
         // do your jobs here
+        createNotificationChannel();
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
@@ -84,11 +91,43 @@ public class BizzbeeService extends Service {
 
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Service done", Toast.LENGTH_SHORT).show();
+        NotificationManagerCompat.from(this).cancelAll();
     }
 
+
+    private int i = 0;
     public void makeRequest() {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIF_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_buzzbee)
+                .setContentTitle("Test title")
+                .setContentText("Test content " + i)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+        i++;
 
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        notificationManager.cancel(NOTIF_ID_ALERT);
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify(NOTIF_ID_ALERT, builder.build());
     }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = NOTIF_CHANNEL_ID;
+            String description = "Description";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(NOTIF_CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
 
 }
