@@ -25,6 +25,26 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+/**
+ * Classe MainActivity.
+ *
+ * Activité principale de l'application. C'est sur celle-ci qu'arrive l'utilisateur au démarrage de
+ * l'application. A partir d'elle, l'utilisateur peut accéder à la plupart des autres pages.
+ * Elle contient un NavigationDrawer afin de faciliter la navigation entre les autres activités.
+ *
+ * On peut accéder à :
+ * * Le tableau de bord (par défaut au démarrage)
+ * * La liste des ruchers
+ * * La connexion
+ * * La déconnexion
+ * * Les préférences
+ * * La page "à propos"
+ *
+ * @see AppCompatActivity
+ * @see com.desbois.mathis.bizzbee.WelcomeFragment.WelcomeListener
+ *
+ * @author Maxime Gautier
+ */
 public class MainActivity extends AppCompatActivity implements WelcomeFragment.WelcomeListener {
 
     public static final int CONNECTION = 0;
@@ -34,16 +54,29 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
     private static final String TAG = "MainActivity";
 
     private static DrawerLayout drawerLayout;
-    private final List<MenuItem> items = new ArrayList<>();
+    private NavigationView mNavigationView;
 
     private SharedPreferences sharedPref;
 
     private BizzbeeApp app;
 
+    private Fragment prevFrag;
+
+    /**
+     * Création de l'activité.
+     *
+     * Initialise toutes les variables nécessaires au fonctionnement de l'application.
+     * Etablit les préférences choisies par l'utilisateur ou celle par défaut.
+     * Met en place la gestion de la navigation par le NavigationDrawer
+     *
+     * @param savedInstanceState Instance de l'état enregistrée avant que l'activité n'ait été détruite
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mNavigationView = findViewById(R.id.nav_view);
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -58,14 +91,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        Menu menu = navigationView.getMenu();
-
-        for(int i = 0; i < menu.size(); i++){
-            items.add(menu.getItem(i));
-        }
-
-        Fragment frag = new WelcomeFragment();
+        Fragment frag = (prevFrag == null) ? new WelcomeFragment() : prevFrag;
 
         if (sharedPref.contains("serv_url")) {
             app.setServUrl(sharedPref.getString("serv_url", ""));
@@ -80,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
                 Log.e(TAG, "" + e.getMessage());
             }
 
-            frag = new WelcomeFragment(); // TODO a changer en tableau de bord
+            frag = (prevFrag == null) ? new WelcomeFragment() : prevFrag; // TODO a changer en tableau de bord
         } else {
             try {
                 deconnect(this);
@@ -101,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
 
         setMenu(app.isConnected());
 
-        navigationView.setNavigationItemSelectedListener(menuItem -> {
+        mNavigationView.setNavigationItemSelectedListener(menuItem -> {
             drawerLayout.closeDrawers();
 
             // Add code here to update the UI based on the item selected
@@ -114,12 +140,15 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
             switch(menuItem.getItemId()) {
                 case R.id.nav_accueil:
                     fragment = new WelcomeFragment();
+                    prevFrag = fragment;
                     break;
                 case R.id.nav_dashboard:
                     fragment = new WelcomeFragment();
+                    prevFrag = fragment;
                     break;
                 case R.id.nav_rucher:
                     fragment = new ListRucherFragment();
+                    prevFrag = fragment;
                     break;
                 case R.id.nav_settings:
                     intent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -135,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
                 case R.id.nav_deconnect:
                     AlertDialog.Builder alert = new AlertDialog.Builder(this);
                     alert.setTitle("Do you want to logout ?");
-                    // alert.setMessage("Message");
+                    alert.setMessage("You won't be able to access data until you reconnect.");
 
                     alert.setPositiveButton("Ok", (dialog, whichButton) -> {
                         try {
@@ -167,6 +196,15 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
 
     }
 
+    /**
+     * Remise au premier plan de l'activité.
+     *
+     * Met à jour toutes les données nécessaires pour le bon fonctionnement de l'activité.
+     * * L'url du serveur BizzBee
+     * * Si l'option "Resté connecté" a été cochée
+     * * Si l'utilisateur est connecté
+     * * Sur quelle page était l'utilisateur quand il a quité l'activité
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -181,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
             Log.i(TAG, "Not serv url");
         }
 
-        Fragment frag = new WelcomeFragment();
+        Fragment frag = (prevFrag == null) ? new WelcomeFragment() : prevFrag;
 
         if(sharedPref.getBoolean("stay_connected", app.isConnected()) && app.isBizzbeeUrl()) {
             try {
@@ -191,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
                 Log.e(TAG, "" + e.getMessage());
             }
 
-            frag = new WelcomeFragment(); // TODO a changer en tableau de bord
+            frag = (prevFrag == null) ? new WelcomeFragment() : prevFrag; // TODO a changer en tableau de bord
         } else {
             try {
                 deconnect(this);
@@ -211,6 +249,18 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
         setMenu(app.isConnected());
     }
 
+    /**
+     * Réception des réponses d'activités.
+     *
+     * Récupère les informations provenant d'activités afin de les mettre à jour.
+     * * Pour l'activité ConnexionActivity
+     * * * Mettre à jour les identifiants de session s'ils sont corrects
+     * * * Affiche un message d'erreur si l'url du serveur BizzBee saisie est incorrect
+     *
+     * @param requestCode   Code de requête qui a été utilisé pour lancer l'activité
+     * @param resultCode    Code de retour suite à la fin de l'activité appelée
+     * @param data          Données à transmettre entre les 2 activités
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -240,12 +290,30 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
         }
     }
 
+    /**
+     * Connexion de l'utilisateur.
+     *
+     * Connecte l'utilisateur avec les identifiants passés en paramètre.
+     *
+     * @param l                         Login de l'utilisateur
+     * @param p                         Mot de passe de l'utilisateur
+     * @throws CredentialsException     Si on essaie de rentrer de nouveaux identifiants si l'on est déjà connecté
+     */
     public void connect(String l, String p) throws CredentialsException {
         app.setCredentials(l, p);
 
         setMenu(app.isConnected());
     }
 
+    /**
+     * Déconnexion de l'utilisateur.
+     *
+     * Déconnecte l'utilisateur et réinitialise toutes les variables pour remettre l'application dans son
+     * état d edépart.
+     *
+     * @param c                         Contexte dans lequel est appelé la méthode
+     * @throws CredentialsException     Si on essaie de se déconnecter alors que l'utilisateur l'est déjà
+     */
     public void deconnect(Context c) throws CredentialsException {
         Utils.removeSharedPeferences(sharedPref, "login");
         Utils.removeSharedPeferences(sharedPref, "pass");
@@ -262,39 +330,57 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
         setMenu(app.isConnected());
     }
 
+    /**
+     * Met à jour le menu du NavigationDrawer.
+     *
+     * Affiche et cache les menus du NavigationDrawer selon l'état de session de l'utilisateur (connecté ou non)
+     *
+     * @param connected     Etat de la session de l'utilisateur
+     */
     private void setMenu(boolean connected) {
-        getMenuItem(R.id.nav_connect).setVisible(!connected);
-        getMenuItem(R.id.nav_accueil).setVisible(!connected);
-        getMenuItem(R.id.nav_deconnect).setVisible(connected);
-        getMenuItem(R.id.nav_dashboard).setVisible(connected);
-        getMenuItem(R.id.nav_rucher).setVisible(connected);
+        Menu nav = mNavigationView.getMenu();
+
+        nav.findItem(R.id.nav_connect).setVisible(!connected);
+        nav.findItem(R.id.nav_accueil).setVisible(!connected);
+        nav.findItem(R.id.nav_deconnect).setVisible(connected);
+        nav.findItem(R.id.nav_dashboard).setVisible(connected);
+        nav.findItem(R.id.nav_rucher).setVisible(connected);
     }
 
-    public MenuItem getMenuItem(int id) {
-        boolean trouve = false;
-        int i = 0;
-        MenuItem res = null;
-
-        while(!trouve && i < items.size()) {
-            if (items.get(i).getItemId() == id) {
-                trouve = true;
-                res = items.get(i);
-            }
-
-            i++;
-        }
-
-        return res;
-    }
-
+    /**
+     * Mise à jour du titre dans l'ActionBar.
+     *
+     * Met à jour le titre de l'ActionBar de l'activité avec le nouveau titre passé en paramètre.
+     *
+     * @param title     Nouveau titre pour l'ActionBar
+     *
+     * @see ActionBar
+     */
     public void setActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);
     }
 
+    /**
+     * Appel de ConnexionActivity en attendant un résultat en retour.
+     *
+     * Appel ConnexionActivity avec la requête CONNECION en se mettant en attente d'un résultat de celle.
+     *
+     * @see ConnexionActivity
+     */
     public void startConnectionActivity() {
         startActivityForResult(new Intent(MainActivity.this, ConnexionActivity.class), CONNECTION);
     }
 
+    /**
+     * Callback lors d'un clic sur l'item d'un menu.
+     *
+     * Callback appelée lorsque l'utilisateur clique sur l'item d'un menu et agit selon l'item cliqué.
+     *
+     * @param item      MenuItem qui a été cliqué
+     * @return          Résultat de la méthode de la classe parente
+     *
+     * @see MenuItem
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -305,6 +391,16 @@ public class MainActivity extends AppCompatActivity implements WelcomeFragment.W
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Callback lors d'un clic sur le WelcomeFragment
+     *
+     * Callback appelée lorsque l'utilisateur clique dans un WelcomeFragment et démarre une activité selon le bouton cliqué.
+     *
+     * @param v     View sur laquelle l'utilisateur à cliqué
+     *
+     * @see View
+     * @see WelcomeFragment
+     */
     @Override
     public void onButtonClick(View v) {
         switch (v.getId()) {

@@ -17,7 +17,7 @@ import java.util.Objects;
 
 // Instances of this class are fragments representing a single
 // object in our collection.
-public class ListComponentFragment extends ListFragment implements AdapterView.OnItemClickListener {
+abstract class ListComponentFragment extends ListFragment implements AdapterView.OnItemClickListener {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

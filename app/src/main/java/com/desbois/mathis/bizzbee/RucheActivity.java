@@ -80,7 +80,7 @@ public class RucheActivity extends AppCompatActivity {
 
         Request request = new Request.Builder()
                 .url("https://" + ((BizzbeeApp)getApplication()).getServUrl() + url + "?ruche=" + id)
-                .tag("connection")
+                .tag("ruche")
                 .build();
 
         Callback callback = new Callback() {
