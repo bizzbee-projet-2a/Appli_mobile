@@ -1,10 +1,11 @@
 package com.desbois.mathis.bizzbee;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -22,7 +23,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         actionbar.setTitle(R.string.param_tres);
 
-        getSupportFragmentManager().beginTransaction()
+        getFragmentManager().beginTransaction()
                 .replace(R.id.flContent, new SettingsFragment())
                 .commit();
 

@@ -14,6 +14,10 @@ public class BizzbeeApp extends Application {
 
     private boolean connected;
 
+    private double seuilHumidite = 50;
+    private double seuilTemperature = 50;
+    private double seuilPoids = 50;
+
     private static Resources resources;
 
     private Intent intentService;
@@ -96,6 +100,30 @@ public class BizzbeeApp extends Application {
         }
 
         return isBizzbeeUrl;
+    }
+
+    public double getSeuilHumidite() {
+        return seuilHumidite;
+    }
+
+    public void setSeuilHumidite(double seuilHumidite) {
+        this.seuilHumidite = seuilHumidite;
+    }
+
+    public double getSeuilTemperature() {
+        return seuilTemperature;
+    }
+
+    public void setSeuilTemperature(double seuilTemperature) {
+        this.seuilTemperature = seuilTemperature;
+    }
+
+    public double getSeuilPoids() {
+        return seuilPoids;
+    }
+
+    public void setSeuilPoids(double seuilPoids) {
+        this.seuilPoids = seuilPoids;
     }
 
     public String getAuthorization() throws CredentialsException {

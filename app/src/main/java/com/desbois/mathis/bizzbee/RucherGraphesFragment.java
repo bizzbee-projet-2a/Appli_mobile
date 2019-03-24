@@ -1,10 +1,11 @@
 package com.desbois.mathis.bizzbee;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
 
 // Instances of this class are fragments representing a single
 // object in our collection.
