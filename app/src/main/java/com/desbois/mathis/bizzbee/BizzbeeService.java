@@ -281,6 +281,10 @@ public class BizzbeeService extends Service {
                                     }
 
                                     if(!isGood) {
+                                        Intent intent = new Intent(getApplicationContext(), RucheActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
+
                                         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), NOTIF_CHANNEL_ID)
                                                 .setSmallIcon(R.drawable.ic_buzzbee)
                                                 .setStyle(new NotificationCompat.BigTextStyle()
@@ -289,6 +293,7 @@ public class BizzbeeService extends Service {
                                                 .setContentText(notifText)
                                                 .setGroup(GROUP_KEY_ALERT)
                                                 .setDefaults(Notification.DEFAULT_ALL)
+                                                .setContentIntent(pendingIntent)
                                                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
                                         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());

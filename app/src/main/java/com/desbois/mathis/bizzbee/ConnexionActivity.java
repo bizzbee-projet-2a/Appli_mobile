@@ -15,8 +15,10 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,7 +44,6 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
     private EditText mNameValue;
     private EditText mPasswordValue;
     private Button mConnexionButton;
-    private TextView mPasswordForget;
     private CheckBox mStayConnected;
 
     private String url = "";
@@ -111,7 +112,6 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
         mPasswordValue = findViewById(R.id.activity_connexion_password_value);
 
         mConnexionButton = findViewById(R.id.activity_connexion_button_connexion);
-        mPasswordForget = findViewById(R.id.activity_connexion_password_forgetit);
 
         mStayConnected = findViewById(R.id.stay_connected);
 
@@ -190,11 +190,18 @@ public class ConnexionActivity extends AppCompatActivity implements View.OnClick
                 //le retour est effectué dans un thread différent
                 final String text = response.body().string();
 
+                Log.i(TAG, text);
                 runOnUiThread(() -> {
-                    if(response.isSuccessful() && text.equals("OK")) {
-                        onLoginSuccess(login, password, stayConnected);
-                    } else {
-                        onLoginFailed("Login failed");
+                    try {
+                        JSONObject json = new JSONObject(text);
+
+                        if(response.isSuccessful() && json.getBoolean("ok")) {
+                            onLoginSuccess(login, password, stayConnected);
+                        } else {
+                            onLoginFailed("Login failed");
+                        }
+                    } catch (JSONException e) {
+                        onLoginFailed("Something wrong happened");
                     }
                 });
 

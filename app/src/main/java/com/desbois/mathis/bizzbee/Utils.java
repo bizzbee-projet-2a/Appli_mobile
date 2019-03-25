@@ -1,7 +1,6 @@
 package com.desbois.mathis.bizzbee;
 
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 
@@ -36,7 +35,7 @@ abstract class Utils implements Callback {
         Log.i("Bizzbee", "BBBB " + s);
 
         Request request = new Request.Builder()
-                .url("https://" + s.replaceAll(" ", "") + "/version")
+                .url("https://" + s.replaceAll(" ", "") + "/informationsApi")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -64,7 +63,7 @@ abstract class Utils implements Callback {
 
         changed = false;
 
-        return isUrl(s) && Pattern.compile("^Bizzbee-\\d+.\\d+").matcher(tmp).matches();
+        return isUrl(s) && Pattern.compile("^API bizzbee version \\d+.\\d+").matcher(tmp).matches();
     }
 
     public static void cancelRequest(OkHttpClient okHttpClient) {
