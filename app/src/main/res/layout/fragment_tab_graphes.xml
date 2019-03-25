@@ -4,14 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView"
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/graph"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:padding="10dp"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        android:text="@string/graphes"/>
+        android:textSize="40sp"></com.github.mikephil.charting.charts.BarChart>
 
 </LinearLayout>
