@@ -39,17 +39,24 @@
         </activity>
         <activity android:name=".PasswordActivity"/>
         <activity
-            android:name=".RucherActivity" android:parentActivityName=".MainActivity" >
+            android:name=".RucherActivity"
+            android:launchMode="singleTop" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
         </activity>
-        <activity android:name=".RucheActivity" android:parentActivityName=".RucherActivity" >
+        <activity
+            android:name=".RucheActivity"
+            android:parentActivityName=".RucherActivity"
+            android:taskAffinity=".RucherActivity"
+            android:launchMode="singleTop" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".RucherActivity"/>
         </activity>
-        <activity android:name=".SettingsActivity" android:parentActivityName=".MainActivity" >
+        <activity
+            android:name=".SettingsActivity"
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>

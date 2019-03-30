@@ -258,7 +258,7 @@ public class BizzbeeService extends Service {
 
                                     if(actual.has("humidite")) {
                                         double humid = Double.parseDouble(actual.getJSONObject("humidite").getString("val"));
-                                        if(humid > 50L) {
+                                        if(humid > ((BizzbeeApp)getApplication()).getSeuilHumidite()) {
                                             grandText += "\t- Humidite : " + humid + "\n";
                                             isGood = false;
                                         }
@@ -266,7 +266,7 @@ public class BizzbeeService extends Service {
 
                                     if(actual.has("temperature")) {
                                         double temp = Double.parseDouble(actual.getJSONObject("temperature").getString("val"));
-                                        if(temp > 50L) {
+                                        if(temp > ((BizzbeeApp)getApplication()).getSeuilTemperature()) {
                                             grandText += "\t- Temperature : " + temp + "\n";
                                             isGood = false;
                                         }
@@ -274,7 +274,7 @@ public class BizzbeeService extends Service {
 
                                     if(actual.has("poids")) {
                                         double poids = Double.parseDouble(actual.getJSONObject("poids").getString("val"));
-                                        if(poids > 50L) {
+                                        if(poids > ((BizzbeeApp)getApplication()).getSeuilPoids()) {
                                             grandText += "\t- Poids : " + poids + "\n";
                                             isGood = false;
                                         }
@@ -283,7 +283,12 @@ public class BizzbeeService extends Service {
                                     if(!isGood) {
                                         Intent intent = new Intent(getApplicationContext(), RucheActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
+                                        Log.i(TAG, "" + json.getInt("id"));
+                                        intent.putExtra(RucheActivity.RUCHE_ID, json.getInt("id"));
+
+                                        intent.setAction("actionstring" + System.currentTimeMillis());
+
+                                        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                                         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), NOTIF_CHANNEL_ID)
                                                 .setSmallIcon(R.drawable.ic_buzzbee)
@@ -299,7 +304,8 @@ public class BizzbeeService extends Service {
                                         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
                                         // notificationId is a unique int for each notification that you must define
-                                        notificationManager.notify(NOTIF_ID_ALERT + idRuche, builder.build());
+                                        notificationManager.notify(NOTIF_ID_ALERT + json.getInt("id")
+                                                , builder.build());
 
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                             Notification summaryNotification =

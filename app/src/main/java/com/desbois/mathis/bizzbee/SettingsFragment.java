@@ -89,27 +89,42 @@ public class SettingsFragment extends PreferenceFragment
                 String limHumidite = sharedPreferences.getString(key, "");
                 EditTextPreference text = (EditTextPreference) findPreference(key);
 
-                ((BizzbeeApp) getActivity().getApplication()).setSeuilHumidite(Double.parseDouble(limHumidite));
-                text.setSummary("Seuil : " + ((BizzbeeApp) getActivity().getApplication()).getSeuilHumidite());
-                Toast.makeText(getActivity(), "Humidity limit set", Toast.LENGTH_LONG).show();
+                try {
+                    ((BizzbeeApp) getActivity().getApplication()).setSeuilHumidite(Double.parseDouble(limHumidite));
+                    text.setSummary("Seuil : " + ((BizzbeeApp) getActivity().getApplication()).getSeuilHumidite());
+                    Toast.makeText(getActivity(), "Humidity limit set", Toast.LENGTH_LONG).show();
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getActivity(), "Must be a number...", Toast.LENGTH_LONG).show();
+                    Utils.removeSharedPeferences(sharedPref, key);
+                }
                 break;
             }
             case "lim_temperature": {
                 String limTemperature = sharedPreferences.getString(key, "");
                 EditTextPreference text = (EditTextPreference) findPreference(key);
 
-                ((BizzbeeApp) getActivity().getApplication()).setSeuilTemperature(Double.parseDouble(limTemperature));
-                text.setSummary("Seuil : " + ((BizzbeeApp) getActivity().getApplication()).getSeuilTemperature());
-                Toast.makeText(getActivity(), "Temperature limit set", Toast.LENGTH_LONG).show();
+                try {
+                    ((BizzbeeApp) getActivity().getApplication()).setSeuilTemperature(Double.parseDouble(limTemperature));
+                    text.setSummary("Seuil : " + ((BizzbeeApp) getActivity().getApplication()).getSeuilTemperature());
+                    Toast.makeText(getActivity(), "Temperature limit set", Toast.LENGTH_LONG).show();
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getActivity(), "Must be a number...", Toast.LENGTH_LONG).show();
+                    Utils.removeSharedPeferences(sharedPref, key);
+                }
                 break;
             }
             case "lim_poids": {
                 String limPoids = sharedPreferences.getString(key, "");
                 EditTextPreference text = (EditTextPreference) findPreference(key);
 
-                ((BizzbeeApp) getActivity().getApplication()).setSeuilPoids(Double.parseDouble(limPoids));
-                text.setSummary("Seuil : " + ((BizzbeeApp) getActivity().getApplication()).getSeuilPoids());
-                Toast.makeText(getActivity(), "Weight limit set", Toast.LENGTH_LONG).show();
+                try {
+                    ((BizzbeeApp) getActivity().getApplication()).setSeuilPoids(Double.parseDouble(limPoids));
+                    text.setSummary("Seuil : " + ((BizzbeeApp) getActivity().getApplication()).getSeuilPoids());
+                    Toast.makeText(getActivity(), "Weight limit set", Toast.LENGTH_LONG).show();
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getActivity(), "Must be a number...", Toast.LENGTH_LONG).show();
+                    Utils.removeSharedPeferences(sharedPref, key);
+                }
                 break;
             }
         }

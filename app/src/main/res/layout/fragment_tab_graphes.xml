@@ -10,6 +10,6 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:padding="10dp"
-        android:textSize="40sp"></com.github.mikephil.charting.charts.BarChart>
+        android:textSize="40sp" />
 
 </LinearLayout>

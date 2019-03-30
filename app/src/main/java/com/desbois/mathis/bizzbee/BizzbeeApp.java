@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.util.Base64;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 public class BizzbeeApp extends Application {
     private String servUrl;
     private boolean isBizzbeeUrl;
@@ -39,6 +41,8 @@ public class BizzbeeApp extends Application {
         resources = getResources();
 
         intentService = new Intent(this, BizzbeeService.class);
+
+        JodaTimeAndroid.init(this);
     }
 
     public void startBizzbeeService() {

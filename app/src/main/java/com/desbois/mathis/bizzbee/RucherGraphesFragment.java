@@ -1,10 +1,5 @@
 package com.desbois.mathis.bizzbee;
 
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -27,9 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -40,19 +32,16 @@ import okhttp3.Response;
 // Instances of this class are fragments representing a single
 // object in our collection.
 public class RucherGraphesFragment extends Fragment {
+    private static final String TAG = "RucherGraphesFragment";
 
-    private static final int BAD_ID = -1;
-    private static final String TAG = "BizzBeeService";
     private static final String urlTree = "/getTree";
     private static final String urlRuche = "/rucheInfos";
 
     private Handler handler = new Handler();
-    private SharedPreferences sharedPref;
 
-    private ArrayList<Integer> poids = new ArrayList<Integer>();
-    private ArrayList<Integer> temperature = new ArrayList<Integer>();
-    private ArrayList<Integer> humidite = new ArrayList<Integer>();
-
+    private ArrayList<Integer> poids = new ArrayList<>();
+    private ArrayList<Integer> temperature = new ArrayList<>();
+    private ArrayList<Integer> humidite = new ArrayList<>();
 
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -62,31 +51,14 @@ public class RucherGraphesFragment extends Fragment {
 
         //getData(getIntent().getIntExtra("idRuche", BAD_ID));
 
-        Runnable runnableCode = new Runnable() {
-            @Override
-            public void run() {
-                // Do something here on the main thread
-                if(sharedPref.getBoolean("notif", false)) {
-                    Log.i(TAG, "" + ((BizzbeeApp)getActivity().getApplication()).isBizzbeeUrl());
 
-                    if(!((BizzbeeApp)getActivity().getApplication()).isBizzbeeUrl()) {
-                        Toast.makeText(getActivity().getApplicationContext(), "You cannot enable notifications without providing URL", Toast.LENGTH_LONG).show();
-                        Utils.removeSharedPeferences(sharedPref, "notif");
-                        ((BizzbeeApp)getActivity().getApplication()).stopBizzbeeService();
-                    } else {
-                        makeRequest();
-                    }
-                }
+        BarChart barChart = view.findViewById(R.id.graph);
 
-                // Repeat this the same runnable code block again another 2 seconds
-                // 'this' is referencing the Runnable object
-                // TODO voir délai de chaque requete
-                handler.postDelayed(this, 10000);
-            }
-        };
-
-
-        BarChart barChart = (BarChart)view.findViewById(R.id.graph);
+        poids.add(15);
+        temperature.add(45);
+        temperature.add(4);
+        temperature.add(48);
+        humidite.add(24);
 
         float groupSpace = 0.06f;
         float barSpace = 0.02f; // x2 dataset
@@ -182,7 +154,7 @@ public class RucherGraphesFragment extends Fragment {
 
                 Log.i(TAG, "" + child.has("child"));
 
-                if(child.getInt("isrucher") < 0) {
+                if(!child.has("child")) {
                     OkHttpClient okHttpClient = new OkHttpClient();
 
                     int idRuche = child.getInt("id");
