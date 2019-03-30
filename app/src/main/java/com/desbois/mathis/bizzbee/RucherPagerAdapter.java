@@ -21,7 +21,7 @@ public class RucherPagerAdapter extends FragmentStatePagerAdapter {
         Fragment fragment = null;
         switch (i) {
             case 0:
-                fragment = new RucherGraphesFragment();
+                fragment = new RucherGrapheRuchesFragment();
                 break;
             case 1:
                 fragment = new RucherListeRuchesFragment();
