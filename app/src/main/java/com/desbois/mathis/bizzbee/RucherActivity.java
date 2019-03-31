@@ -38,7 +38,8 @@ public class RucherActivity extends AppCompatActivity
     private static final String url = "/getTreeFromRucher";
     private static final String TAG = "RucherActivity";
 
-    public static final String RUCHER_ID = "RucherActivity.idSrc";
+    public static final String RUCHER_ID_PARENT = "RucherActivity.idSrc";
+    public static final String RUCHER_ID = "RucherActivity.idRucher";
 
     private static final int BAD_ID = -1;
 
@@ -145,17 +146,19 @@ public class RucherActivity extends AppCompatActivity
                     idRucher = json.getString("id");
                     idParent = json.getString("id_parent");
 
-                    JSONArray children = json.getJSONArray("child");
+                    if(json.has("child")) {
+                        JSONArray children = json.getJSONArray("child");
 
-                    for(int i = 0; i < children.length(); i++) {
-                        JSONObject tmpComp = children.getJSONObject(i);
-                        String tmpNom = tmpComp.getString("nom");
-                        int tmpId = tmpComp.getInt("id");
+                        for(int i = 0; i < children.length(); i++) {
+                            JSONObject tmpComp = children.getJSONObject(i);
+                            String tmpNom = tmpComp.getString("nom");
+                            int tmpId = tmpComp.getInt("id");
 
-                        Composant child = new Composant(tmpId, tmpNom);
-                        mChild.add(child);
+                            Composant child = new Composant(tmpId, tmpNom);
+                            mChild.add(child);
 
-                        Log.i(TAG, tmpNom + " " + tmpId);
+                            Log.i(TAG, tmpNom + " " + tmpId);
+                        }
                     }
 
                     mRucher = new Rucher(id, nom, Integer.parseInt(idParent), mChild);

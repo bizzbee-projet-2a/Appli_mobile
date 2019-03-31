@@ -47,7 +47,7 @@ public class RucherListeRuchesFragment extends ListComponentFragment {
         OkHttpClient okHttpClient = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://" + ((BizzbeeApp)getActivity().getApplication()).getServUrl() + url + "?ruche=" + id)
+                .url("https://" + ((BizzbeeApp)getActivity().getApplication()).getServUrl() + url + "?ruche=" + mListe.get(position).getId())
                 .tag("ruche")
                 .build();
 
@@ -66,16 +66,21 @@ public class RucherListeRuchesFragment extends ListComponentFragment {
 
                 Intent babout;
                 String key;
+
+                Log.i(TAG, response.isSuccessful() + " " + text);
+
                 if(response.isSuccessful() && text.equals("true")) {
                     babout = new Intent(getContext(), RucherActivity.class);
-                    key = "idRucher";
+                    key = RucherActivity.RUCHER_ID;
                 } else {
                     babout = new Intent(getContext(), RucheActivity.class);
-                    key = "idRuche";
+                    key = RucheActivity.RUCHE_ID;
                 }
 
+                Log.i(TAG, babout.getType() + " " + key + " " + mListe.get(position).getNom() + " " + mListe.get(position).getId());
+
                 babout.putExtra(key, mListe.get(position).getId());
-                babout.putExtra(RucherActivity.RUCHER_ID, ((RucherActivity)getActivity()).getId());
+                babout.putExtra(RucherActivity.RUCHER_ID_PARENT, ((RucherActivity)getActivity()).getId());
 
                 startActivity(babout);
             }

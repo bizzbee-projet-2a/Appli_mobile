@@ -1,5 +1,7 @@
 package com.desbois.mathis.bizzbee;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +31,8 @@ public class ListRucherFragment extends ListComponentFragment {
 
     private static final String TAG = "ListRucherFragment";
 
+    private ProgressDialog progressDialog;
+
     private Handler handler = new Handler();
 
     @Override
@@ -50,6 +54,12 @@ public class ListRucherFragment extends ListComponentFragment {
     }
 
     public void makeRequest() {
+        progressDialog = new ProgressDialog(getContext());
+
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Getting information...");
+        progressDialog.show();
+
         OkHttpClient okHttpClient = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -61,6 +71,7 @@ public class ListRucherFragment extends ListComponentFragment {
             @Override
             public void onFailure(Call call, IOException e) {
                 handler.removeCallbacksAndMessages(null);
+                progressDialog.dismiss();
                 Log.i(TAG, "Failed");
                 Log.i(TAG, e.getMessage());
             }
@@ -94,12 +105,20 @@ public class ListRucherFragment extends ListComponentFragment {
                 } else {
                     Log.i(TAG, "Fail");
                 }
+
+                progressDialog.dismiss();
             }
         };
 
         Call response = okHttpClient.newCall(request);
         response.enqueue(callback);
         Log.i(TAG, response.request().toString());
+
+        progressDialog.setOnCancelListener((DialogInterface dialog) -> {
+            Utils.cancelRequest(okHttpClient);
+            getDataFailed("Attempt canceled...");
+            handler.removeCallbacksAndMessages(null);
+        });
 
         handler.postDelayed(() -> {
             Utils.cancelRequest(okHttpClient);
@@ -120,5 +139,9 @@ public class ListRucherFragment extends ListComponentFragment {
                 Log.e(TAG, e.getMessage());
             }
         }
+    }
+
+    public void getDataFailed(String m) {
+        Toast.makeText(getContext(), m, Toast.LENGTH_LONG).show();
     }
 }
