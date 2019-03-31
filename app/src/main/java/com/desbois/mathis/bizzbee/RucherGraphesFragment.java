@@ -81,9 +81,9 @@ public class RucherGraphesFragment extends Fragment {
         BarDataSet set3 = new BarDataSet(entriesGroup3, "Humidité");
 
         BarData data = new BarData(set1, set2, set3);
-        set1.setColors(ColorTemplate.MATERIAL_COLORS);
-        set2.setColors(ColorTemplate.MATERIAL_COLORS);
-        set3.setColors(ColorTemplate.MATERIAL_COLORS);
+        set1.setColors(ColorTemplate.rgb("ff1700"));
+        set2.setColors(ColorTemplate.rgb("f033ff"));
+        set3.setColors(ColorTemplate.rgb("000cff"));
 
         data.setBarWidth(barWidth); // set the width of each bar
         barChart.setData(data);

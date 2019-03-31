@@ -24,16 +24,17 @@
             android:id="@+id/content"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="10pt"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10pt">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/qui_sommes_nous"
                 android:textAllCaps="false"
-                android:textSize="8pt" />
+                android:textSize="8pt"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -48,27 +49,63 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10pt"
-                android:text="@string/nous_contacter"
-                android:textSize="8pt" />
+                android:text="@string/objectif"
+                android:textSize="8pt"
+                android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/txtSubject"
+            <TextView
+                android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10pt"
-                android:hint="@string/subject" />
+                android:text="@string/a_propos_sujet"
+                android:textAllCaps="false"
+                android:textSize="7pt" />
 
-            <EditText
-                android:id="@+id/txtMessage"
+            <TextView
+                android:id="@+id/textView4"
                 android:layout_width="match_parent"
-                android:layout_height="100pt"
-                android:hint="@string/message" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10pt"
+                android:text="@string/equipe"
+                android:textSize="8pt"
+                android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btnOK"
+            <TextView
+                android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/envoyer" />
+                android:layout_marginTop="10pt"
+                android:text="@string/mebres_1"
+                android:textAllCaps="false"
+                android:textSize="7pt" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10pt"
+                android:text="@string/mebres_2"
+                android:textAllCaps="false"
+                android:textSize="7pt" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10pt"
+                android:text="@string/mebres_3"
+                android:textAllCaps="false"
+                android:textSize="7pt" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10pt"
+                android:text="@string/mebres_4"
+                android:textAllCaps="false"
+                android:textSize="7pt" />
 
 
         </LinearLayout>
